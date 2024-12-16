@@ -14,7 +14,7 @@ A cybersecurity tool for demonstrating XSS vulnerabilities and cookie exploitati
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/YourUsername/CookieCatcher.git
+   git clone https://github.com/Nuru1d33n/CookieCatcher.git
    ```
 2. Install dependencies:
 
